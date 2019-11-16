@@ -1,0 +1,24 @@
+{
+  "name": "pagination-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "postinstall": "prisma2 generate"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma2": "^2.0.0-preview016.2"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.9.9",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "nexus": "^0.12.0-rc.4",
+    "nexus-prisma": "^0.5.2",
+    "nodemon": "^1.19.4",
+    "path": "^0.12.7"
+  }
+}
