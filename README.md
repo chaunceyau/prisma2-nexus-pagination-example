@@ -1,10 +1,36 @@
-# prisma2-nexus-pagination-example
-Example directory using Prisma2, GraphQL Nexus and Apollo Server to create paginated queries.
-
-## Overview
+# Understanding Pagination with Prisma2 and GraphQL
 In this tutorial, you will learn the fundamentals of implementing pagination with [Prisma2](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with Prisma, we definitely suggest exploring the [Prisma Website](https://www.prisma.io). Prisma2 is rewrite  of the original Prisma, with two tools for handling your database workflows: `Photon` and `Lift`. You can read more about both tools and the motivation on the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
 
-## Steps to Completion
+### Pagination: Offset-based vs Cursor-based
+There are many ways to do pagination, but the two main ways to focus on today are **Offset-based** and **Cursor-based**. The primary difference between these two approaches is the the way **you specify the first record** to fetch in our database for the request. Both approaches you typically provide a **limit/count**, which is the **number of additional records** to retrieve **after the first record** you specify. 
+
+Using the **offset-based** approach, the request specifies the **number of records to skip** (a.k.a. the offset). Using the **cursor-based** approach, the request specifies **a unique identifier of the first record to start from** (a.k.a. the cursor). If you'd like to learn more about the pros & cons of each approach, we strongly encourage you to [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
+
+![lowfi difference between cursor and offset](https://i.imgur.com/VeoVdgT.png)
+
+## Libraries Overview
+Below are the libraries you will use to build our GraphQL API that will allow us to request paginated results. There is a brief description of what each library does.
+1. **prisma2:** *photon:* type-safe data access client & *lift:* for db migrations
+2. **express:** node.js server
+3. **apollo-server-express:** graphql server
+4. **nexus:** code-first graphql schema
+5. **nexus-prisma:** bindings between nexus and prisma
+6. **graphql:** peer dependency
+
+![main libraries](https://i.imgur.com/GpU8R3z.png)
+
+## Implementation Overview
+You will now get hands on and create a pagination example using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can get a functional example of pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
+
+1. Install Prisma2
+2. Follow through Prisma2 CLI to create project with Photon and Lift
+3. Add the libraries to provide functionality
+4. Setup apollo-server-express 
+5. Setup types/resolvers with Nexus
+6. Add pagination functionality
+7. Database migration
+
+## Let's Get Started - Steps to Completion
 
 1. **npx prisma2 init pagination-example**
   Follow the prompts with these options: (1) blank project, (2) SQLite, (3) include photon and lift -> confirm, (4) JavaScript - feel free to use TypeScript, (5) Just the prisma schema. You should now have a folder called *pagination-example* with a prisma folder inside.
@@ -188,3 +214,7 @@ async function seedDb() {
 ```
 
 15. Now you are ready to query against the GraphQL endpoint using the respective postsOffset or postsCursor queries to retrieve paginated results! Congratulations!
+
+## Wrap Up
+Hopefully this provided an overview of the simplicity and power of `Prisma2`. With the auto-generated photon client, developers can add pagination to a project very quickly. Nexus is not a neccesity in this scenario, but can be a very powerful approach to schema development. If you have any questions, feel free to leave them in the comments and we will hope to help clarify and issues you have!
+
