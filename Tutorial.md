@@ -7,17 +7,17 @@ There are many ways to do pagination, but the two main ways to focus on today ar
 Using the **offset-based** approach, the request specifies the **number of records to skip** (a.k.a. the offset). Using the **cursor-based** approach, the request specifies **a unique identifier of the first record to start from** (a.k.a. the cursor). 
 
 ### Primary Concerns
-***Offset-based*** pagination has some benefits in that end users can easily move between pages and see the total number of results, which are lost in ***cursor-based***. The two issues with ***offset-based*** pagination is ***(1)*** potential loss of speed at scale - db still reads data from the disk up to the offset + count and ***(2)\**** unstable to use numerical offset with faster changing data - the record at offset ***5***, is no longer ***5*** when a new record is added to the collection.
+***Offset-based*** pagination has some benefits in that clients can easily move between pages and see the total number of results, which are lost in ***cursor-based***. The two issues with ***offset-based*** pagination is ***(1)*** potential loss of speed at scale - db still reads data from the disk up to the offset + count and ***(2)\**** unstable to use numerical offset with faster changing data - the record at offset ***5***, is no longer ***5*** when a new record is added to the collection.
 
 * Imagine the scenario in the image. 1. *User A* starts by requesting records 1-4. 2. *User B* adds a new record to the collection. 3. *User A* now requests records 5-9. - As all of the records have now shifted, the *request for records 5-9* will include *record 4* that was in the original request.
 
 ![offset issue with new record](https://i.imgur.com/rHcE98N.png)
 
-When using ***cursor-based*** pagination, a couple issues we come across are losing the concept of the total number of pages/results in the set, and the client can’t jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with rapidly changing data.
+When using ***cursor-based*** pagination, a couple issues we come across are losing the concept of the total number of pages/results in the set, and the client can no longer jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with rapidly changing data.
 
 If you'd like to learn more about the pros & cons of each approach, you should [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
 
-![lowfi difference between cursor and offset](https://i.imgur.com/VeoVdgT.png)
+![lowfi difference between cursor and offset](https://i.imgur.com/i16d0DH.png)
 
 ## Libraries Overview
 Below are the libraries you will use to build our GraphQL API that will allow us to request paginated results. There is a brief description of what each library does.
@@ -44,8 +44,15 @@ You will now get hands on and create a pagination example using the following te
 ## Demo Tutorial
 
 ### 1. **npx prisma2 init pagination-example**
-  Follow the prompts with these options: (1) blank project, (2) SQLite, (3) include photon and lift -> confirm, (4) JavaScript - feel free to use TypeScript, (5) Just the prisma schema. You should now have a folder called *pagination-example* with a prisma folder inside.
+  Follow the prompts with these options: 
+1. blank project
+2. SQLite
+3. include photon and lift -> confirm
+4. JavaScript - feel free to use TypeScript 
+5. Just the prisma schema. You should now have a folder called *pagination-example* with a prisma folder inside.
+
 ### 2. **npm init** - select defaults - should run in *pagination-example* directory
+This will walk you through creating a package.json for your project.
 ### 3. **package.json** - add to scripts to run apollo server & generate db schema
         
 ```js
@@ -79,57 +86,56 @@ app.listen({ port: 4000 }, () =>
         
 ### 7. **Add GraphQL Nexus -** Rather than the standard apollo server typedefs and resolvers, you are going to use GraphQL nexus.
 
+1. Photon is our type-safe database access client 
+2. nexus allows us to take code-first approach to creating our api
+3. nexus-prisma is the plugin which you use for the t.model.** below
+
 ```js
 // index.js
-// ADD IMPORTS
-// Photon is our type-safe database access client
 const { Photon } = require('@generated/photon')
-// create an instance of photon
 const photon = new Photon()
-// nexus allows us to take code-first approach to creating our api
 const { objectType, queryType, makeSchema } = require("nexus")
-// nexus-prisma is the plugin which you use for the t.model.** below
 const { nexusPrismaPlugin } = require('nexus-prisma')
-// used below
 const { join } = require('path')
 ```
       
-Next, you have to add the models you wish to expose in our API. This is similar to the typeDefs used in a standard Apollo Server without Nexus.
+Next, you have to add the models you wish to expose in our API. This is similar to the typeDefs used in a standard Apollo Server without Nexus. The first two items created below is an *objectType* for both User and Post. This exposes these from our database.
 
 ```js 
 // index.js
-// represents a user type. only fields exposed are id and email
 const User = objectType({
   name: 'User',
-  // 't.model' provided by nexus-prisma
   definition(t) {
     t.model.id(),
     t.model.email()
   }
 })
 
-// post type. exposing id, 
 const Post = objectType({
   name: 'Post',
-  // 't.model' provided by nexus-prisma
   definition(t) {
     t.model.id(),
     t.model.title(),
     t.model.author()
   }
 })
-// root query type
+```
+
+In the Query you define using *queryType*, you can start to expose queries you want to enable clients to run. 
+```js 
+// index.js
 const Query = queryType({
   definition(t) {
     // you will add pagination queries here
   }
 });
+```
 
-// provided by nexus to create a scheme from our types with additional optional configuration
+Finally, you create a schema using *makeSchema*, which includes your types, a plugin for nexus-prism and a path to output.
+```js
+// index.js
 const schema = makeSchema({
-  // our three main types from above
   types: [Query, User, Post],
-  // this plugin gives us access to the t.model.**
   plugins: [nexusPrismaPlugin()],
   outputs: {
     typegen: join(
