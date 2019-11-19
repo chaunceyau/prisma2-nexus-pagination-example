@@ -6,12 +6,13 @@ There are many ways to do pagination, but the two main ways to focus on today ar
 
 Using the **offset-based** approach, the request specifies the **number of records to skip** (a.k.a. the offset). Using the **cursor-based** approach, the request specifies **a unique identifier of the first record to start from** (a.k.a. the cursor). 
 
-### Primary Concerns
+### Pros & Cons
 ***Offset-based*** pagination has some benefits in that clients can easily move between pages and see the total number of results, which are lost in ***cursor-based***. The two issues with ***offset-based*** pagination is ***(1)*** potential loss of speed at scale - db still reads data from the disk up to the offset + count and ***(2)\**** unstable to use numerical offset with faster changing data - the record at offset ***5***, is no longer ***5*** when a new record is added to the collection.
 
 * Imagine the scenario in the image. 1. *User A* starts by requesting records 1-4. 2. *User B* adds a new record to the collection. 3. *User A* now requests records 5-9. - As all of the records have now shifted, the *request for records 5-9* will include *record 4* that was in the original request.
 
 ![offset issue with new record](https://i.imgur.com/rHcE98N.png)
+
 
 When using ***cursor-based*** pagination, a couple issues we come across are losing the concept of the total number of pages/results in the set, and the client can no longer jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with rapidly changing data.
 
