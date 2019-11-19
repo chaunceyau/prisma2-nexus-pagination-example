@@ -153,8 +153,9 @@ const server = new ApolloServer({ schema, context: { photon } })
 ```
 
 ### 8. Add Pagination Query
-Now you need to update our Query type to include a query that you can use to request paginated results.
+Now you need to update our Query type to include a query that you can use to request paginated results. Notice in the args object, you provide the arguments the query can accept. The resolve function handles the logic of returning a result from the request. The context object is provided as a parameter to the resolve function, which gives access to the photon instance.
 
+Records can be select before and after a cursor, so you have to handle both cases. Thanks to Photon and Nexus-Prisma, you have out-of-the-box for pagination and can easily implement it using the *after, first and last* options.
 
 ```js
 const Query = queryType({
@@ -174,7 +175,7 @@ const Query = queryType({
           else if (last)
             posts = await ctx.photon.posts.findMany({ before: cursor, last })
           else
-            posts = await ctx.photon.posts.findMany()
+            posts = await ctx.photon.posts.findMany({ first: 10 })
         } catch (error) { console.log(error) }
 
         return posts
@@ -185,7 +186,7 @@ const Query = queryType({
 ```
     
 ### 9. Database Migration - using Lift
-    The last step is to apply our database migration using Lift to actually setup the SQLite database. **First,** you need to run `prisma2 lift save` to prepare our migration. Terminal will prompt for a name for the migration, which is up to you! After you name the migration, you need to actually apply the changes to our database. To do this, you run `prisma2 lift up` and our database will be up-to-date. Now you can test our queries by running our ApolloServer and use GraphQL playground! 
+The last step is to apply our database migration using Lift to actually setup the SQLite database. **First,** you need to run `prisma2 lift save` to prepare our migration. Terminal will prompt for a name for the migration, which is up to you! After you name the migration, you need to actually apply the changes to our database. To do this, you run `prisma2 lift up` and our database will be up-to-date. Now you can test our queries by running our ApolloServer and use GraphQL playground! 
 
     You will also need to seed your database with some post records. You can handle this **(a) manually** using Prisma Studio, which can be thought of as an *IDE to your database*, providing a web-based interface to handle the data in the database. You can run access Prisma Studio by running `prisma2 dev` in the *root project directory* and visting the output url (localhost:5555 by default). **(b)** If you are having issues doing this manually, you can also **(2) handle it programatically** by running a function in apollo-server that *creates a record* from the photon client.
     
