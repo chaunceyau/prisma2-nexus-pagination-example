@@ -1,10 +1,21 @@
-# Understanding Pagination with Prisma2 and GraphQL
-In this tutorial, you will learn the fundamentals of implementing pagination with [Prisma2](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with Prisma, we definitely suggest exploring the [Prisma Website](https://www.prisma.io). Prisma2 is rewrite  of the original Prisma, with two tools for handling your database workflows: `Photon` and `Lift`. You can read more about both tools and the motivation on the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
+# Understanding Pagination with the Prisma Framework and GraphQL
+In this tutorial, you will learn the fundamentals of implementing pagination with the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with the Prisma Framework, definitely start by exploring the [Prisma Website](https://www.prisma.io). Prisma2 is rewrite  of the original Prisma, with two tools for handling your database workflows: Photon and Lift. You can read more about both tools and the motivation on the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
 
-### Pagination: Offset-based vs Cursor-based
+## Pagination: Offset-based vs Cursor-based
 There are many ways to do pagination, but the two main ways to focus on today are **Offset-based** and **Cursor-based**. The primary difference between these two approaches is the the way **you specify the first record** to fetch in our database for the request. Both approaches you typically provide a **limit/count**, which is the **number of additional records** to retrieve **after the first record** you specify. 
 
-Using the **offset-based** approach, the request specifies the **number of records to skip** (a.k.a. the offset). Using the **cursor-based** approach, the request specifies **a unique identifier of the first record to start from** (a.k.a. the cursor). If you'd like to learn more about the pros & cons of each approach, we strongly encourage you to [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
+Using the **offset-based** approach, the request specifies the **number of records to skip** (a.k.a. the offset). Using the **cursor-based** approach, the request specifies **a unique identifier of the first record to start from** (a.k.a. the cursor). 
+
+### Primary Concerns
+***Offset-based*** pagination has some benefits in that end users can easily move between pages and see the total number of results, which are lost in ***cursor-based***. The two issues with ***offset-based*** pagination is ***(1)*** potential loss of speed at scale - db still reads data from the disk up to the offset + count and ***(2)\**** unstable to use numerical offset with faster changing data - the record at offset ***5***, is no longer ***5*** when a new record is added to the collection.
+
+* Imagine the scenario in the image. 1. *User A* starts by requesting records 1-4. 2. *User B* adds a new record to the collection. 3. *User A* now requests records 5-9. - As all of the records have now shifted, the *request for records 5-9* will include *record 4* that was in the original request.
+
+![offset issue with new record](https://i.imgur.com/rHcE98N.png)
+
+When using ***cursor-based*** pagination, a couple issues we come across are losing the concept of the total number of pages/results in the set, and the client can’t jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with rapidly changing data.
+
+If you'd like to learn more about the pros & cons of each approach, you should [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
 
 ![lowfi difference between cursor and offset](https://i.imgur.com/VeoVdgT.png)
 
@@ -30,23 +41,23 @@ You will now get hands on and create a pagination example using the following te
 6. Add pagination functionality
 7. Database migration
 
-## Let's Get Started - Steps to Completion
+## Demo Tutorial
 
-1. **npx prisma2 init pagination-example**
+### 1. **npx prisma2 init pagination-example**
   Follow the prompts with these options: (1) blank project, (2) SQLite, (3) include photon and lift -> confirm, (4) JavaScript - feel free to use TypeScript, (5) Just the prisma schema. You should now have a folder called *pagination-example* with a prisma folder inside.
-2. **npm init** - select defaults - should run in *pagination-example* directory
-3. **package.json** - add to scripts to run apollo server & generate db schema
+### 2. **npm init** - select defaults - should run in *pagination-example* directory
+### 3. **package.json** - add to scripts to run apollo server & generate db schema
         
 ```js
 "dev": "node ./index.js",
 "postinstall": "prisma2 generate"
 ```
 
-4. **npm i prisma2 --save-dev**
-You will notice this likely unfamiliar line print in the console: *"Downloading darwin binary for query-engine and migration-engine"*. This is the postinstallation hook running and generating the `Photon` client.
-5. **npm i express apollo-server-express nexus nexus-prisma graphql**
-  Take a look at the [`Libraries Overview`](#libraries-overview) section to understand what each library does.
-6. **Create index.js file for apollo-server and add Photon client**
+### 4. **npm i prisma2 --save-dev**
+You will notice this likely unfamiliar line print in the console: *"Downloading darwin binary for query-engine and migration-engine"*. This is the postinstallation hook running and generating the Photon client.
+### 5. **npm i express apollo-server-express nexus nexus-prisma graphql**
+  Take a look at the [Libraries Overview](#libraries-overview) section to understand what each library does.
+### 6. **Create index.js file for apollo-server and add Photon client**
 This is a standard apollo server with no special functionality added yet. In the next steps you will add GraphQL Nexus and start implementing our schema.
 
 ```js
@@ -66,7 +77,7 @@ app.listen({ port: 4000 }, () =>
 );
 ```
         
-12. **Add GraphQL Nexus -** Rather than the standard apollo server typedefs and resolvers, you are going to use GraphQL nexus.
+### 7. **Add GraphQL Nexus -** Rather than the standard apollo server typedefs and resolvers, you are going to use GraphQL nexus.
 
 ```js
 // index.js
@@ -128,53 +139,36 @@ const schema = makeSchema({
   },
 });
 ```
-You also need to update our `ApolloServer` constructor to include our `schema` and `photon` instance.
+You also need to update our ApolloServer constructor to include our schema and photon instance.
 
 ```js
 // index.js
 const server = new ApolloServer({ schema, context: { photon } })
 ```
 
-13. Add Pagination Queries
-Now you need to update our `Query` type to include a query that you can use to request paginated results. Below are two seperate queries, one for `offsets` and one for `cursors`. While the queries are very similar, notice the difference in arguments passed to the resolvers
+### 8. Add Pagination Query
+Now you need to update our Query type to include a query that you can use to request paginated results.
 
 
 ```js
-// index.js
-// root query type
 const Query = queryType({
   definition(t) {
-    // OFFSET-BASED
-    // define a query to retrieve posts based on an offset
-    t.list.field('postsOffset', { 
-      // post type as defined above
+    t.list.field('posts', {
       type: 'Post',
-      // resolvers , arguments destructured from request
-      resolve: async (parent, { offset, limit }, ctx) => {
-        // if not provided, inform client/end-user
-        if (!offset || !limit) throw new Error('Please provide an offset and limit.')
+      args: {
+        cursor: idArg(),
+        first: intArg(),
+        last: intArg()
+      },
+      resolve: async (parent, { cursor, first, last }, ctx) => {
         let posts = []
         try {
-          // notice that prisma and nexus already have out-of-the-box support
-          // for requesting a collection of records by including a skip and first
-          posts = await ctx.photon.posts.findMany({ skip: offset, first: limit })
-        } catch (error) { console.log(error) }
-
-        return posts
-      }
-    }),
-    
-    // CURSOR-BASED
-    // resolvers , arguments destructured from request
-    t.list.field('postsCursor', {
-      type: 'Post',
-      resolve: async (parent, { cursor, limit }, ctx) => {
-        // if not provided, inform client/end-user
-        if (!cursor || !limit) throw new Error('Please provide an cursor and limit.')
-        let posts = []
-        try {
-          // also includes out-of-the-box support for starting at a cursor record
-          posts = await ctx.photon.posts.findMany({ after: cursor, first: limit })
+          if (first)
+            posts = await ctx.photon.posts.findMany({ after: cursor, first })
+          else if (last)
+            posts = await ctx.photon.posts.findMany({ before: cursor, last })
+          else
+            posts = await ctx.photon.posts.findMany()
         } catch (error) { console.log(error) }
 
         return posts
@@ -184,10 +178,10 @@ const Query = queryType({
 });
 ```
     
-14. Database Migration - using Lift
-    The last step is to apply our database migration using `Lift` to actually setup the SQLite database. **First,** you need to run `prisma2 lift save` to prepare our migration. Terminal will prompt for a name for the migration, which is up to you! After you name the migration, you need to actually apply the changes to our database. To do this, you run `prisma2 lift up` and our database will be up-to-date. Now you can test our queries by running our ApolloServer and use GraphQL playground! 
+### 9. Database Migration - using Lift
+    The last step is to apply our database migration using Lift to actually setup the SQLite database. **First,** you need to run `prisma2 lift save` to prepare our migration. Terminal will prompt for a name for the migration, which is up to you! After you name the migration, you need to actually apply the changes to our database. To do this, you run `prisma2 lift up` and our database will be up-to-date. Now you can test our queries by running our ApolloServer and use GraphQL playground! 
 
-    You will also need to seed your database with some post records. You can handle this **(a) manually** using `Prisma Studio`, which can be thought of as an *IDE to your database*, providing a web-based interface to handle the data in the database. You can run access `Prisma Studio` by running `prisma2 dev` in the *root project directory* and visting the output url (localhost:5555 by default). **(b)** If you are having issues doing this manually, you can also **(2) handle it programatically** by running a function in apollo-server that *creates a record* from the `photon client`.
+    You will also need to seed your database with some post records. You can handle this **(a) manually** using Prisma Studio, which can be thought of as an *IDE to your database*, providing a web-based interface to handle the data in the database. You can run access Prisma Studio by running `prisma2 dev` in the *root project directory* and visting the output url (localhost:5555 by default). **(b)** If you are having issues doing this manually, you can also **(2) handle it programatically** by running a function in apollo-server that *creates a record* from the photon client.
     
 ```js
 async function seedDb() {
@@ -213,8 +207,7 @@ async function seedDb() {
 }
 ```
 
-15. Now you are ready to query against the GraphQL endpoint using the respective postsOffset or postsCursor queries to retrieve paginated results! Congratulations!
+10. Now you are ready to query against the GraphQL endpoint using the respective postsOffset or postsCursor queries to retrieve paginated results! Congratulations!
 
 ## Wrap Up
-Hopefully this provided an overview of the simplicity and power of `Prisma2`. With the auto-generated photon client, developers can add pagination to a project very quickly. Nexus is not a neccesity in this scenario, but can be a very powerful approach to schema development. If you have any questions, feel free to leave them in the comments and we will hope to help clarify and issues you have!
-
+Hopefully this provided an overview of the simplicity and power of Prisma2. With the auto-generated photon client, developers can add pagination to a project very quickly. Nexus is not a neccesity in this scenario, but can be a very powerful approach to schema development. If you have any questions, feel free to leave them in the comments and we will hope to help clarify and issues you have!
