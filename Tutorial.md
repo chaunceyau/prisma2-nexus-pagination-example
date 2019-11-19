@@ -14,7 +14,7 @@ Using the **offset-based** approach, the request specifies the **number of recor
 ![offset issue with new record](https://i.imgur.com/rHcE98N.png)
 
 
-When using ***cursor-based*** pagination, a couple issues we come across are losing the concept of the total number of pages/results in the set, and the client can no longer jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with rapidly changing data.
+***Cursor-based*** pagination also has pros and cons. A couple drawbacks are: losing the concept of the total number of pages/results in the set, and the client can no longer jump to a specific page. Otherwise, ***cursor-based*** solutions tend to be more flexible and are the go-to option with quickly changing data.
 
 If you'd like to learn more about the pros & cons of each approach, you should [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
 
