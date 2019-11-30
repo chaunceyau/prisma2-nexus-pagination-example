@@ -1,5 +1,7 @@
 # Understanding Pagination with the Prisma Framework and GraphQL
-This tutorial will cover the fundamentals of pagination and the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with the Prisma Framework, we encourage you to first read the [Prisma Website](https://www.prisma.io). Prisma Framework includes two tools for improving your database workflows: Photon and Lift. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5). //The other two tools used in this tutorial are [GraphQL Nexus](https://nexus.js.org), which allows us to *build code-first schemas* & [nexus-prisma](https://github.com/prisma-labs/nexus-prisma) which provides *bindings between Prisma and Nexus*, as well as provides out-of-the-box support for pagination.
+This tutorial will cover the fundamentals of pagination and the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with the Prisma Framework, we encourage you to first read the [Prisma Website](https://www.prisma.io). Prisma Framework includes two tools for improving your database workflows: Photon and Lift. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
+
+The other two tools used in this tutorial are [GraphQL Nexus](https://nexus.js.org), which allows us to *build code-first schemas* & [nexus-prisma](https://github.com/prisma-labs/nexus-prisma) which provides *bindings between Prisma and Nexus*, as well as provides out-of-the-box support for pagination.
 
 ## Pagination Introduction
 Pagination is a practice of requesting subsets, or "pages" of data in your applications. You have likely seen pagination used in scenarios such as *Google/e-commerce search*, *Twitter feed* and many more. Rather than requesting every possible Twitter post in the first request, requests are made for small subsets of posts as you scroll - improving application performance and reducing load on backend servers.
@@ -40,10 +42,10 @@ In the [step-by-step tutorial below](#FIXME), you will see how simple and quick 
 
 If you'd like to learn more about cursor vs offset-based pagination, you should [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
 
-## Pagination Tutorial -- Step-by-Step
+## Pagination Tutorial Step-by-Step
 It is time to get hands on and create a functional pagination example using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can get a functional example of pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
 
-1. [Install the Prisma Framework](#1-Install-Prisma-Framework)
+1. [Install the Prisma Framework](#1.-Install-Prisma-Framework)
 2. [Initialize Prisma Project and NPM Project](#2-Initialize-Prisma-Project-and-NPM-Project)
 3. [Add Project Scripts and Install Dependencies](#l)
 4. [Create Apollo Server and Photon Client](#4)
