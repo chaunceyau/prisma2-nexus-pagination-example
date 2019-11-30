@@ -45,7 +45,7 @@ If you'd like to learn more about cursor vs offset-based pagination, you should 
 ## Tutorial
 It is time to get hands on and create a functional pagination example using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can get a functional example of pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
 
-1. [Install the Prisma Framework](#1.-Install-Prisma-Framework)
+1. [Install the Prisma Framework](#Install-Prisma-Framework)
 2. [Initialize Prisma Project and NPM Project](#2-Initialize-Prisma-Project-and-NPM-Project)
 3. [Add Project Scripts and Install Dependencies](#l)
 4. [Create Apollo Server and Photon Client](#4)
@@ -53,7 +53,7 @@ It is time to get hands on and create a functional pagination example using the 
 6. [Creating & Exposing Schema using GraphQL Nexus](#4)
 7. [Database migration using Lift](#l)
 
-### 1. Install Prisma Framework
+### Install Prisma Framework
 
 This will install the Prisma Framework globally on your local machine, providing a CLI for initializing Prisma applications.
 
