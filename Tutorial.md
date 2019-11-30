@@ -46,12 +46,11 @@ If you'd like to learn more about cursor vs offset-based pagination, you should 
 It is time to get hands on and create a functional pagination example using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can get a functional example of pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
 
 1. [Install the Prisma Framework](#1-install-prisma-framework)
-2. [Initialize Prisma Project and NPM Project](#2-Initialize-Prisma-Project-and-NPM-Project)
-3. [Add Project Scripts and Install Dependencies](#l)
-4. [Create Apollo Server and Photon Client](#4)
-5. [Setup types/resolvers with Nexus](#5)
-6. [Creating & Exposing Schema using GraphQL Nexus](#4)
-7. [Database migration using Lift](#l)
+2. [Initialize Prisma Project and NPM Project](#2-initialize-prisma-project-and-npm-project)
+3. [Add Project Scripts and Install Dependencies](#3-add-project-scripts-and-install-dependencies)
+4. [Create Apollo Server and Photon Client](#4-create-apollo-server-and-photon-client)
+5. [Creating & Exposing Schema using GraphQL Nexus](#5-creating--exposing-schema-using-graphql-nexus)
+6. [Database migration using Lift](#6-database-migration-using-lift#)
 
 ### 1. Install Prisma Framework
 
@@ -79,7 +78,7 @@ cd pagination-example
 npm init -y
 ```
 
-### 4. Add Project Scripts and Install Dependencies
+### 3. Add Project Scripts and Install Dependencies
 
 In package.json, you need to add to scripts to run your server and a posinstall hook to generate the database schema.
 
@@ -103,7 +102,7 @@ npm install graphql                   # required peer dependency
 ```
 You should notice this probably unfamiliar line print in the console: *"Downloading darwin binary for query-engine and migration-engine"*. This is the postinstallation hook running and generating the Photon client.
 
-### 5. Create Apollo Server and Photon Client
+### 4. Create Apollo Server and Photon Client
 You will start by creating standard apollo server with no special functionality added yet. Typically you would provide schema's typeDefs and resolvers -- as template literals -- to the ApolloServer constructor, but this example uses GraphQL Nexus and to create the schema -- which you will do in the next step.
 
 ```js
@@ -127,7 +126,7 @@ app.listen({ port: 4000 }, () =>
 );
 ```
         
-### 6. Creating & Exposing Schema using GraphQL Nexus
+### 5. Creating & Exposing Schema using GraphQL Nexus
 You can now start building your schema using nexus, which allows us to create our code-first -- rather than defining our entire schema upfront using SDL. Start with the required imports from nexus -- to create your GraphQL types & schema, as well as nexus-prisma -- providing the bindings between nexus & prisma. **Nexus-prisma** also allows us to us `t.model/t.crud` later and provides out-of-the box pagination, filtering & sorting.
 
 ```js
@@ -187,7 +186,7 @@ Finally, you need to update the ApolloServer constructor to include the schema a
 const server = new ApolloServer({ schema, context: { photon } })
 ```
 
-### 7. Database Migration using Lift
+### 6. Database Migration using Lift
 The last step is to apply our database migration using Lift to actually setup the SQLite database. **First,** you need to run `prisma2 lift save` to prepare our migration. Terminal will prompt for a name for the migration, which is up to you! After you name the migration, you need to actually apply the changes to our database. To do this, you run `prisma2 lift up` and our database will be up-to-date. Now you can test our queries by running our ApolloServer and use GraphQL playground! 
 
 You will also need to seed your database with some post records one of two ways:
