@@ -53,7 +53,7 @@ It is time to get hands on and create a functional pagination example using the 
 6. [Creating & Exposing Schema using GraphQL Nexus](#4)
 7. [Database migration using Lift](#l)
 
-### Install Prisma Framework
+### 1. Install Prisma Framework
 
 This will install the Prisma Framework globally on your local machine, providing a CLI for initializing Prisma applications.
 
