@@ -50,7 +50,7 @@ It is time to get hands on and create a functional pagination example using the 
 3. [Add Project Scripts and Install Dependencies](#3-add-project-scripts-and-install-dependencies)
 4. [Create Apollo Server and Photon Client](#4-create-apollo-server-and-photon-client)
 5. [Creating & Exposing Schema using GraphQL Nexus](#5-creating--exposing-schema-using-graphql-nexus)
-6. [Database migration using Lift](#6-database-migration-using-lift#)
+6. [Database migration using Lift](#6-database-migration-using-lift)
 
 ### 1. Install Prisma Framework
 
