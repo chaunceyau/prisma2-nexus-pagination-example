@@ -4,7 +4,7 @@ This tutorial will cover the fundamentals of pagination and the [Prisma Framewor
 ## Pagination Introduction
 Pagination is a practice of requesting subsets, or "pages" of data in your applications. You have likely seen pagination used in scenarios such as *Google/e-commerce search*, *Twitter feed* and many more. Rather than requesting every possible Twitter post in the first request, requests are made for small subsets of posts as you scroll - improving application performance and reducing load on backend servers.
 
-![example of paginating](https://imgur.com/tAt09FL.png)
+![example of paginating](https://i.imgur.com/KhohHY3.png)
 
 There are multiple ways to implement pagination with their own use cases. Two of the most common approaches are **Offset-based** and **Cursor-based** pagination. Both of these approaches typically require providing the **first record** and the **number of records before/after**. The primary difference is selecting the first record by an id - *a cursor* - versus skipping a number of existing records - *an offset*.
 
@@ -12,12 +12,12 @@ There are multiple ways to implement pagination with their own use cases. Two of
 
 Using **offset-based** pagination, requests should specify the **number of records to skip** (a.k.a. the offset) and the **number of additional records to fetch**. The number of records after the offset is often called the **count or limit**. Offset-based pagination is often easy to implement, while providing end users the ability to jump between specific pages. 
 
-![Offset epagination example](https://imgur.com/KoWnRwo.png)
+![Offset epagination example](https://i.imgur.com/EoIz02y.png)
 
 
 Two issues to consider when considering offset-based pagination are: **(1)** loss of speed at scale -- database will still read data from the disk --  up to the offset + count and **(2)** it can be unstable to use numerical offset with faster changing data. Imagine the scenario described by the sequence of steps and image below.
 
-![offset issue with new record](https://imgur.com/u9FYSUy.png)
+![offset issue with new record](https://i.imgur.com/6meovfI.png)
 
 The scenarios above depicts **2 requests** at **different points in time**, from the same client. In this example of pagination, **4 items** are returned **per page**. The 1st request **returns results 1-4** and the 2nd request will **return results 5-8**. Imagine **a new record** is added by a different user **between the 1st and 2nd** request. Now the **original 4th record** will be **5th in the database**, and therefore also **returned in the 2nd request**.
 
@@ -25,7 +25,7 @@ The scenarios above depicts **2 requests** at **different points in time**, from
 
 Using the **cursor-based** approach, the request will specify **a unique identifier of the first record** (a.k.a. the cursor). The request should also include a count of records to include. **Cursor-based** solutions tend to be **more flexible** and are the go-to option with **quickly changing data**. The drawbacks include **no concept** of the **total number of pages/results** in the set and the client can no longer **jump to a specific page**. 
 
-![l](https://imgur.com/OFBeTwI.png)
+![Cursor based example](https://i.imgur.com/cViLrgS.png)
 
 In the [step-by-step tutorial below](#FIXME), you will see how simple and quick it is to set up an *API serving paginated data from a live database*. When using Prisma and Nexus, there is out-of-the box support for pagination. The cursor is passed to the query as either the **before** or **after** argument and the number of additional records is passed as the argument **first**.
 
@@ -117,7 +117,7 @@ app.listen({ port: 4000 }, () =>
 ```
         
 ### 6. Creating & Exposing Schema using GraphQL Nexus
-You can now start building your schema using nexus, which allows us to create our code-first -- rather than defining our entire schema upfront using SDL. You will start with some imports from nexus -- to create your GraphQL types & schema, as well as nexus-prisma -- providing the bindings between nexus & prisma. **Nexus-prisma** also allows us to us `t.model/t.crud` later and provides out-of-the box pagination, filtering & sorting.
+You can now start building your schema using nexus, which allows us to create our code-first -- rather than defining our entire schema upfront using SDL. Start with the required imports from nexus -- to create your GraphQL types & schema, as well as nexus-prisma -- providing the bindings between nexus & prisma. **Nexus-prisma** also allows us to us `t.model/t.crud` later and provides out-of-the box pagination, filtering & sorting.
 
 ```js
 // 1. imports - index.js
@@ -126,7 +126,7 @@ const { nexusPrismaPlugin } = require('nexus-prisma')
 const { join } = require('path')
 ```
       
-Next, you have to add the models you wish to expose in your API. This is similar to the typeDefs used in a standard Apollo Server without Nexus. The first two items created below is an *objectType* for both User and Post. This exposes these fields from your database.
+Next, add the types you wish to expose in your API. This is similar to the typeDefs used in a standard Apollo Server without Nexus. The first two items created below is an *objectType* for both User and Post. This exposes these fields from your database.
 
 ```js 
 // 2. user/post type - index.js
@@ -140,7 +140,7 @@ const Post = objectType({
 })
 ```
 
-You start creating the root Query using *queryType* -- to expose queries you wish -- starting with requesting Posts. Thanks to Photon and Nexus-Prisma, you have out-of-the-box for pagination and can easily implement it using the *before/last or after/first* arguments.
+Next, create a root Query using *queryType* -- to start exposing queries -- beginning with the posts query. Thanks to Photon and Nexus-Prisma, you have out-of-the-box for pagination and can easily implement it using the *before/last or after/first* arguments.
 
 ```js 
 // 3. query type - index.js
