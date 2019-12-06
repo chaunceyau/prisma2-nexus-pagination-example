@@ -1,12 +1,12 @@
 # Understanding Pagination with the Prisma Framework and GraphQL
-In this article, you will learn how to **implement pagination** using the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). You will also cover **two of the most common practices** for paginating data.
+In this article, you will learn how to **implement pagination** using the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). You will also cover **two of the most common practices** for paginating data. If you are unfamiliar with Prisma, we encourage you to **first explore** the [Prisma website](https://www.prisma.io) prior to completing this tutorial. 
 
-If you are unfamiliar with Prisma, we encourage you to **first explore** the [Prisma website](https://www.prisma.io) prior to completing this tutorial. The Prisma Framework is composed of two tools to improve database workflows: **Photon and Lift.** [Photon](https://photonjs.prisma.io) is a **type-safe database access client** and [Lift](https://lift.prisma.io) is powerful **database schema migration** tool. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
+The [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2) is composed of two tools to improve database workflows: **Photon and Lift.** [Photon](https://photonjs.prisma.io) is a **type-safe database access client** and [Lift](https://lift.prisma.io) is powerful **database schema migration** tool. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
 
 ## Introduction to Pagination
-**Pagination is a practice of requesting subsets**, or "pages" of data in your applications, allowing client applications to avoid requesting every available record. This will likely improving application performance and reduce the stress on backend servers.
+**Pagination is a practice of requesting subsets**, or "pages" of data in your applications, allowing client applications to **avoid requesting every available record.** This will likely **improve application performance** and **reduce the stress** on backend servers.
 
-Pagination can come in the form of literal pages of data displayed, as you have likely seen with Google search results. However, it can also be more complex. Twitter/Instagram feeds also used pagination to request subsets of data to handle the "Infinite Scrolling" effect. 
+Pagination can come in the form of **literal pages of data** (e.g. 10 pages, 50 records per page), as you have likely seen with **Google search results**. However, pagination can also be used to request data in other scenarios. The **Twitter/Instagram** feeds also **use pagination** to request subsets of data to implement the **"Infinite Scrolling" effect.** 
 
 
 <p align="center">
