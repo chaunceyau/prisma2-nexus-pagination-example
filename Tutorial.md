@@ -42,7 +42,7 @@ If you'd like to learn more about cursor vs offset-based pagination, you should 
 
 ## Tutorial
 
-![main libraries](tech-used.png)
+![main libraries](ApolloServerPrismaNexus.png)
 
 It is time to get hands on and **create a functional pagination example** using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can create a server with pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
 
