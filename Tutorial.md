@@ -33,7 +33,7 @@ The scenarios above depicts **2 requests** at **different points in time**, from
 Using the **cursor-based** approach, the request will specify **a unique identifier of the first record** (a.k.a. the cursor). The request should also include a count of records to include. **Cursor-based** solutions tend to be **more flexible** and are the go-to option with **quickly changing data**. The drawbacks include **no concept** of the **total number of pages/results** in the set and the client can no longer **jump to a specific page**. 
 
 <p align="center">
-  <img width="440" height="110" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursor-based-example.png" alt="Cursor-based example">
+  <img width="530" height="111" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursor-based-example.png" alt="Cursor-based example">
 </p>
 
 In the [step-by-step tutorial below](#tutorial), you will see how **simple and quick** it is to set up an **API serving paginated data from a live database**. You will use [Prisma](https://prisma.io) and [Nexus](https://nexus.js.org), which provide **out-of-the box support** for pagination. The **"cursor"** is equivalent to the **before** or **after** arguments and the number of additional records is passed as the argument **first** or **last** - depending on the query uses before OR after.
