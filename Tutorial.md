@@ -6,13 +6,11 @@ The [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8
 ## Introduction to Pagination
 **Pagination is a practice of requesting subsets**, or "pages" of data in your applications, allowing client applications to **avoid requesting every available record.** This will likely **improve application performance** and **reduce the stress** on backend servers.
 
-Pagination can come in the form of **literal pages of data** (e.g. 10 pages, 50 records per page), as you have likely seen with **Google search results**. However, pagination can also be used to request data in other scenarios. The **Twitter/Instagram** feeds also **use pagination** to request subsets of data to implement the **"Infinite Scrolling" effect.** 
-
-
-<p align="center">
+<p align="center" marginTop="50">
   <img width="557.25" height="20" src="https://i.imgur.com/KhohHY3.png">
 </p>
 
+Pagination can come in the form of **literal pages of data** (e.g. 10 pages, 50 records per page), as you have likely seen with **Google search results**. However, pagination can also be used to request data in other scenarios. The **Twitter/Instagram** feeds also **use pagination** to request subsets of data to implement the **"Infinite Scrolling" effect.** 
 
 There are multiple ways to implement pagination with their own use cases. Two of the most common approaches are **Offset-based** and **Cursor-based** pagination. Both of these approaches typically require providing the **first record** and the **number of records before/after**. The primary difference is selecting the first record by an id - *a cursor* - versus skipping a number of existing records - *an offset*.
 
