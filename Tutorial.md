@@ -1,4 +1,4 @@
-# Pagination - Learn with GraphQL
+# Implementing Pagination using GraphQL
 In this article, you will learn how to **implement pagination** using the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). You will also cover **two of the most common practices** for paginating data. If you are unfamiliar with Prisma, we encourage you to **first explore** the [Prisma website](https://www.prisma.io) prior to completing this tutorial. 
 
 The [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2) is composed of two tools to improve database workflows: **Photon and Lift.** [Photon](https://photonjs.prisma.io) is a **type-safe database access client** and [Lift](https://lift.prisma.io) is powerful **database schema migration** tool. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
