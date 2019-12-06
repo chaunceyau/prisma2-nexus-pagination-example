@@ -23,7 +23,7 @@ Using **offset-based** pagination, requests should specify the **number of recor
 **Two issues to address** when considering offset-based pagination are: **(1) loss of speed is at scale** -- database will still read data from the disk - up to the offset + count and **(2) unstable to use numerical offset** - especially with rapidly changing data. To better understand issue **(2)**, imagine the scenario described by the sequence of steps and image below.
 
 <p align="center">
-  <img width="440" height="180" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/offsetbased-issue.png" alt="Offset-based Issue">
+  <img width="440" height="180" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/offset-issue.png" alt="Offset-based Issue">
 </p>
 
 The scenarios above depicts **2 requests** at **different points in time**, from the same client. In this example of pagination, **4 items** are returned **per page**. The 1st request **returns results 1-4** and the 2nd request will **return results 5-8**. Imagine **a new record** is added by a different user **between the 1st and 2nd** request. Now the **original 4th record** will be pushed back to the **5th record in the database**, because of the new record, and therefore also **returned in the 2nd request**.
