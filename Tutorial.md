@@ -1,14 +1,18 @@
 # Understanding Pagination with the Prisma Framework and GraphQL
-This tutorial will cover the fundamentals of pagination and the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). If you are unfamiliar with the Prisma Framework, we encourage you to first read the [Prisma Website](https://www.prisma.io). Prisma Framework includes two tools for improving your database workflows: Photon and Lift. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
+In this article, you will learn how to **implement pagination** using the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). You will also cover **two of the most common practices** for paginating data.
 
-The other two tools used in this tutorial are [GraphQL Nexus](https://nexus.js.org), which allows us to *build code-first schemas* & [nexus-prisma](https://github.com/prisma-labs/nexus-prisma) which provides *bindings between Prisma and Nexus*, as well as provides out-of-the-box support for pagination.
+If you are unfamiliar with Prisma, we encourage you to **first explore** the [Prisma website](https://www.prisma.io) prior to completing this tutorial. The Prisma Framework is composed of two tools to improve database workflows: **Photon and Lift.** [Photon](https://photonjs.prisma.io) is a **type-safe database access client** and [Lift](https://lift.prisma.io) is powerful **database schema migration** tool. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
 
-## Introduction
-Pagination is a practice of requesting subsets, or "pages" of data in your applications. You have likely seen pagination used in scenarios such as *Google/e-commerce search*, *Twitter feed* and many more. Rather than requesting every possible Twitter post in the first request, requests are made for small subsets of posts as you scroll - improving application performance and reducing load on backend servers.
+## Introduction to Pagination
+**Pagination is a practice of requesting subsets**, or "pages" of data in your applications, allowing client applications to avoid requesting every available record. This will likely improving application performance and reduce the stress on backend servers.
+
+Pagination can come in the form of literal pages of data displayed, as you have likely seen with Google search results. However, it can also be more complex. Twitter/Instagram feeds also used pagination to request subsets of data to handle the "Infinite Scrolling" effect. 
+
 
 <p align="center">
   <img width="557.25" height="20" src="https://i.imgur.com/KhohHY3.png">
 </p>
+
 
 There are multiple ways to implement pagination with their own use cases. Two of the most common approaches are **Offset-based** and **Cursor-based** pagination. Both of these approaches typically require providing the **first record** and the **number of records before/after**. The primary difference is selecting the first record by an id - *a cursor* - versus skipping a number of existing records - *an offset*.
 
