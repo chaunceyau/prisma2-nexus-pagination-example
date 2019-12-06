@@ -23,7 +23,7 @@ Using **offset-based** pagination, requests should specify the **number of recor
 **Two issues to address** when considering offset-based pagination are: **(1) loss of speed is at scale** -- database will still read data from the disk - up to the offset + count and **(2) unstable to use numerical offset** - especially with rapidly changing data. To better understand issue **(2)**, imagine the scenario described by the sequence of steps and image below.
 
 <p align="center">
-  <img width="453" height="184" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/offset-based-example.png" alt="Offset-based Issue">
+  <img width="453" height="184" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/offsetbased-example.png" alt="Offset-based Issue">
 </p>
 
 The scenarios above depicts **2 requests** at **different points in time**, from the same client. In this example of pagination, **4 items** are returned **per page**. The 1st request **returns results 1-4** and the 2nd request will **return results 5-8**. Imagine **a new record** is added by a different user **between the 1st and 2nd** request. Now the **original 4th record** will be pushed back to the **5th record in the database**, because of the new record, and therefore also **returned in the 2nd request**.
@@ -33,7 +33,7 @@ The scenarios above depicts **2 requests** at **different points in time**, from
 Using the **cursor-based** approach, the request will specify **a unique identifier of the first record** (a.k.a. the cursor). The request should also include a count of records to include. **Cursor-based** solutions tend to be **more flexible** and are the go-to option with **quickly changing data**. The drawbacks include **no concept** of the **total number of pages/results** in the set and the client can no longer **jump to a specific page**. 
 
 <p align="center">
-  <img width="440" height="139" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursorbased-diagram.png" alt="Cursor-based example">
+  <img width="440" height="139" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursor-based-example.png" alt="Cursor-based example">
 </p>
 
 In the [step-by-step tutorial below](#tutorial), you will see how **simple and quick** it is to set up an **API serving paginated data from a live database**. You will use [Prisma](https://prisma.io) and [Nexus](https://nexus.js.org), which provide **out-of-the box support** for pagination. The **"cursor"** is equivalent to the **before** or **after** arguments and the number of additional records is passed as the argument **first** or **last** - depending on the query uses before OR after.
