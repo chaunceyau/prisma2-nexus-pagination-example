@@ -1,9 +1,5 @@
 # Implementing Pagination using GraphQL
-In this article/tutorial, you will learn how to about the fundamentals of **pagination** using GraphQL. **Pagination** is used in many applications today, ranging from displaying pages search results to fetching more results at the bottom of an application feed. 
-
-**implement pagination** using the [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2). You will also cover **two of the most common practices** for paginating data. If you are unfamiliar with Prisma, we encourage you to **first explore** the [Prisma website](https://www.prisma.io) prior to completing this tutorial. 
-
-The [Prisma Framework](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5#getting-started-with-prisma-2) is composed of two tools to improve database workflows: **Photon and Lift.** [Photon](https://photonjs.prisma.io) is a **type-safe database access client** and [Lift](https://lift.prisma.io) is powerful **database schema migration** tool. You can read more about the specifics of both tools in the [Prisma 2 Preview blog post](https://www.prisma.io/blog/announcing-prisma-2-zq1s745db8i5).
+In this article/tutorial, you will learn how to about the fundamentals of **pagination** and how to its implemented using GraphQL. **Pagination** is used in many applications today, ranging from displaying pages search results to fetching more results at the bottom of an application feed. By the end of this post, you should **better understand pagination** AND have the **ability to build a GraphQL API serving paginated requests.** 
 
 ## Introduction to Pagination
 **Pagination is a practice of requesting subsets**, or "pages" of data in your applications, allowing client applications to **avoid requesting every available record.** In most cases, pagination should **improve application performance** and **reduce the stress** on backend servers. Pagination can be built to serve **literal pages of data** (e.g. 10 pages, 50 records per page), as you have likely seen with **Google search results**, implement features like the **"Infinite Scrolling" effect** used in the **Twitter/Instagram**, and many other use cases.
@@ -40,11 +36,14 @@ Using the **cursor-based** approach, the request will specify **a unique identif
   <img width="668" height="148" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursorbased-diagram.png" alt="Cursor-based example">
 </p>
 
-In the [step-by-step tutorial below](#tutorial), you will see how **simple and quick** it is to set up an **API serving paginated data from a live database**. You will use Prisma and Nexus, which provide **out-of-the box support** for pagination. The **"cursor"** is equivalent to the **before** or **after** arguments and the number of additional records is passed as the argument **first** or **last** - depending on the query uses before OR after.
+In the [step-by-step tutorial below](#tutorial), you will see how **simple and quick** it is to set up an **API serving paginated data from a live database**. You will use [Prisma](https://prisma.io) and [Nexus](https://nexus.js.org), which provide **out-of-the box support** for pagination. The **"cursor"** is equivalent to the **before** or **after** arguments and the number of additional records is passed as the argument **first** or **last** - depending on the query uses before OR after.
 
 If you'd like to learn more about cursor vs offset-based pagination, you should [read this blog post](https://slack.engineering/evolving-api-pagination-at-slack-1c1f644f8e12) written by the Slack development team.
 
 ## Tutorial
+
+![main libraries](tech-used.png)
+
 It is time to get hands on and **create a functional pagination example** using the following technologies: GraphQL, Prisma, Photon/Lift, Nexus, Nexus-Prisma,  and SQLite. Using these technologies, you can create a server with pagination running in less than 30 minutes. Here is a high-level overview of the steps that will be envolved in the process.
 
 1. [Install the Prisma Framework](#1-install-prisma-framework)
@@ -54,7 +53,7 @@ It is time to get hands on and **create a functional pagination example** using 
 5. [Creating & Exposing Schema using GraphQL Nexus](#5-creating--exposing-schema-using-graphql-nexus)
 6. [Database migration using Lift](#6-database-migration-using-lift)
 
-![main libraries](tech-used.png)
+
 
 ### 1. Install Prisma Framework
 
