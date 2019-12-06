@@ -12,8 +12,7 @@ There are multiple ways to implement pagination with their own use cases. **Two 
 
 ### Offset-based Pagination
 ---
-Using **offset-based** pagination, requests should specify the **number of records to skip** in the database (a.k.a. the offset) and the **number of additional records to fetch**. The number of records after the offset is often called the **count or limit**. Offset-based pagination is often easy to implement, while providing end users the ability to jump between specific pages. 
-
+Using **offset-based** pagination, requests should specify the **number of records to skip** in the database (a.k.a. the offset) and the **number of additional records to fetch**. The number of records after the offset is often called the **count or limit**. Offset-based pagination is often easy to implement, while providing end users the ability to jump between specific pages. This makes the method great for scenarios where the user needs to jump between pages or potential know the total number of possible results (e.g. in search functionality).
 
 <p align="center">
   <img width="440" height="110" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/offset-based-example.png" alt="Offset-based Pagination Example">
@@ -30,7 +29,7 @@ The scenarios above depicts **2 requests** at **different points in time**, from
 
 ### Cursor-based Pagination
 ---
-Using the **cursor-based** approach, the request will specify **a unique identifier of the first record** (a.k.a. the cursor). The request should also include a count of records to include. **Cursor-based** solutions tend to be **more flexible** and are the go-to option with **quickly changing data**. The drawbacks include **no concept** of the **total number of pages/results** in the set and the client can no longer **jump to a specific page**. 
+Using the **cursor-based** approach, the request will specify **a unique identifier of the first record** (a.k.a. the cursor). The request should also include a count of records to include. **Cursor-based** solutions tend to be **more flexible**, **scale well with large datasets AND quickly changing data**. The drawbacks include **no concept** of the **total number of pages/results** in the set and the client can no longer **jump to a specific page**. **Cursor-based** pagination is often used in scenarios like the Twitter/Instagram/Facebook feeds and many, many more.
 
 <p align="center">
   <img width="530" height="111" src="https://github.com/chaunceyau/prisma2-nexus-pagination-example/blob/master/cursor-based-example.png" alt="Cursor-based example">
