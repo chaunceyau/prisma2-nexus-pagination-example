@@ -13,7 +13,7 @@
     "prisma2": "^2.0.0-preview016.2"
   },
   "dependencies": {
-    "apollo-server-express": "^2.9.9",
+    "apollo-server-express": "^2.14.2",
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "nexus": "^0.12.0-rc.4",
